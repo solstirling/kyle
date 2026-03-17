@@ -40,8 +40,8 @@ export async function POST(req) {
     ].join("\n");
 
     const message = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest",
-      max_tokens: 900,
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5",
+      max_tokens: 2048,
       temperature: 0.3,
       system: systemPrompt,
       messages: [{ role: "user", content: conflict.trim() }],
@@ -53,6 +53,7 @@ export async function POST(req) {
         ?.map((b) => b.text)
         ?.join("\n") || "";
 
+        console.log(text);
     let parsed;
     try {
       parsed = JSON.parse(text);
@@ -83,6 +84,7 @@ export async function POST(req) {
       market_impacts: parsed.market_impacts,
     });
   } catch (err) {
+    console.error(err);
     return json(
       {
         error: "Unhandled server error.",
