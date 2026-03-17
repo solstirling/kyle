@@ -1,4 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Kyle
+
+Next.js (App Router) + Tailwind app with an Anthropic Claude-backed conflict analysis endpoint.
+
+### Environment setup (`.env.local`)
+
+1) Create your local env file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+2) Open `.env.local` and set:
+
+```bash
+ANTHROPIC_API_KEY=your_api_key_here
+```
+
+3) Run the dev server:
+
+```bash
+npm run dev
+```
+
+### Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/REPLACE_ME_OWNER/REPLACE_ME_REPO)
+
+Replace `REPLACE_ME_OWNER/REPLACE_ME_REPO` with your GitHub repo path after you push this project.
+
+---
+
+This project was bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
@@ -16,7 +48,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `src/app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
