@@ -1,6 +1,62 @@
 "use client";
 
+import ReactMarkdown from "react-markdown";
 import { useMemo, useState } from "react";
+
+function CollapsibleCard({ title, children, defaultOpen = true }) {
+  return (
+    <details
+      defaultOpen={defaultOpen}
+      className="group rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
+        <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+          {title}
+        </div>
+        <div className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-zinc-700 transition group-open:rotate-180 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+          <svg
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-4 w-4"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </summary>
+      <div className="px-4 pb-4 pt-1">{children}</div>
+    </details>
+  );
+}
+
+function MarkdownBody({ children }) {
+  return (
+    <div className="prose prose-zinc max-w-none text-sm leading-6 dark:prose-invert prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5 prose-headings:mt-3 prose-headings:mb-2">
+      <ReactMarkdown>{children || ""}</ReactMarkdown>
+    </div>
+  );
+}
+
+function SkeletonCard({ title }) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="flex items-center justify-between">
+        <div className="h-4 w-40 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+        <div className="h-7 w-7 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800" />
+      </div>
+      <div className="mt-4 space-y-2">
+        <div className="h-3 w-full animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
+        <div className="h-3 w-11/12 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
+        <div className="h-3 w-9/12 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
+      </div>
+      <div className="sr-only">{title}</div>
+    </div>
+  );
+}
 
 export default function Home() {
   const [conflict, setConflict] = useState("");
@@ -92,44 +148,32 @@ export default function Home() {
             </div>
           ) : null}
 
-          {result ? (
+          {isLoading ? (
             <div className="grid gap-4">
-              <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                <div className="text-xs font-medium text-zinc-500">
-                  strategic_analysis
-                </div>
-                <div className="mt-2 whitespace-pre-wrap text-sm leading-6">
-                  {result.strategic_analysis}
-                </div>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                <div className="text-xs font-medium text-zinc-500">
-                  predicted_outcomes
-                </div>
-                <div className="mt-2 whitespace-pre-wrap text-sm leading-6">
-                  {result.predicted_outcomes}
-                </div>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                <div className="text-xs font-medium text-zinc-500">
-                  market_impacts
-                </div>
-                <div className="mt-2 whitespace-pre-wrap text-sm leading-6">
-                  {result.market_impacts}
-                </div>
-              </div>
+              <SkeletonCard title="Strategic Analysis" />
+              <SkeletonCard title="Predicted Outcomes" />
+              <SkeletonCard title="Market Impact" />
+            </div>
+          ) : result ? (
+            <div className="grid gap-4">
+              <CollapsibleCard title="Strategic Analysis" defaultOpen>
+                <MarkdownBody>{result.strategic_analysis}</MarkdownBody>
+              </CollapsibleCard>
+              <CollapsibleCard title="Predicted Outcomes" defaultOpen>
+                <MarkdownBody>{result.predicted_outcomes}</MarkdownBody>
+              </CollapsibleCard>
+              <CollapsibleCard title="Market Impact" defaultOpen>
+                <MarkdownBody>{result.market_impacts}</MarkdownBody>
+              </CollapsibleCard>
 
-              <details className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                <summary className="cursor-pointer text-sm font-medium">
-                  Raw JSON
-                </summary>
-                <pre className="mt-3 overflow-auto text-xs leading-5 text-zinc-700 dark:text-zinc-300">
+              <CollapsibleCard title="Raw JSON" defaultOpen={false}>
+                <pre className="overflow-auto text-xs leading-5 text-zinc-700 dark:text-zinc-300">
                   {pretty}
                 </pre>
-              </details>
+              </CollapsibleCard>
             </div>
           ) : (
-            <div className="rounded-xl border border-dashed border-zinc-300 px-4 py-6 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
+            <div className="rounded-2xl border border-dashed border-zinc-300 px-4 py-6 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
               Submit a description to see results here.
             </div>
           )}
