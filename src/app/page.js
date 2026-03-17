@@ -66,6 +66,20 @@ export default function Home() {
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
 
+  const examplePrompts = useMemo(
+    () => [
+      "Russia-Ukraine drone strikes on energy infrastructure, March 2026. NATO allies debating additional air defense packages.",
+      "China conducts live-fire naval exercises surrounding Taiwan. US carrier group repositioning to South China Sea.",
+      "Iran closes Strait of Hormuz in response to US sanctions expansion. 20% of global oil supply at risk.",
+      "North Korea launches ICBM over Japan. South Korea and US activate DEFCON 3.",
+      "Houthi missile attacks on Saudi Aramco facilities escalating. US Fifth Fleet increasing patrols in Gulf of Aden.",
+      "US expands semiconductor export controls. China retaliates with rare earth export bans.",
+      "Cyberattack on US power grid infrastructure attributed to Chinese state actors.",
+      "OPEC+ announces surprise 2 million barrel per day production cut amid Middle East tensions.",
+    ],
+    []
+  );
+
   const pretty = useMemo(() => {
     if (!result) return "";
     return JSON.stringify(result, null, 2);
@@ -104,6 +118,37 @@ export default function Home() {
             predicted outcomes, and market impacts.
           </p>
         </header>
+
+        <section className="space-y-3">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+              Example prompts
+            </h2>
+            <button
+              type="button"
+              onClick={() => setConflict("")}
+              className="text-xs text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400"
+            >
+              Clear
+            </button>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {examplePrompts.map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => {
+                  setConflict(prompt);
+                  document.getElementById("conflict")?.focus();
+                }}
+                className="inline-flex w-full items-start justify-start rounded-full border border-zinc-200 bg-white px-3 py-2 text-left text-xs leading-5 text-zinc-800 shadow-sm shadow-zinc-950/5 transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/40 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900 dark:focus-visible:ring-zinc-500/40"
+                aria-label={`Use example prompt: ${prompt}`}
+              >
+                <span className="line-clamp-2">{prompt}</span>
+              </button>
+            ))}
+          </div>
+        </section>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
