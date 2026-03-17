@@ -3,10 +3,12 @@
 import ReactMarkdown from "react-markdown";
 import { useMemo, useState } from "react";
 
-function CollapsibleCard({ title, children, defaultOpen = true }) {
+function CollapsibleCard({ title, children, initialOpen = true }) {
+  const [isOpen, setIsOpen] = useState(initialOpen);
   return (
     <details
-      defaultOpen={defaultOpen}
+      open={isOpen}
+      onToggle={(e) => setIsOpen(e.currentTarget.open)}
       className="group rounded-2xl border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950"
     >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
@@ -156,17 +158,17 @@ export default function Home() {
             </div>
           ) : result ? (
             <div className="grid gap-4">
-              <CollapsibleCard title="Strategic Analysis" defaultOpen>
+              <CollapsibleCard title="Strategic Analysis" initialOpen={true}>
                 <MarkdownBody>{result.strategic_analysis}</MarkdownBody>
               </CollapsibleCard>
-              <CollapsibleCard title="Predicted Outcomes" defaultOpen>
+              <CollapsibleCard title="Predicted Outcomes" initialOpen={true}>
                 <MarkdownBody>{result.predicted_outcomes}</MarkdownBody>
               </CollapsibleCard>
-              <CollapsibleCard title="Market Impact" defaultOpen>
+              <CollapsibleCard title="Market Impact" initialOpen={true}>
                 <MarkdownBody>{result.market_impacts}</MarkdownBody>
               </CollapsibleCard>
 
-              <CollapsibleCard title="Raw JSON" defaultOpen={false}>
+              <CollapsibleCard title="Raw JSON" initialOpen={false}>
                 <pre className="overflow-auto text-xs leading-5 text-zinc-700 dark:text-zinc-300">
                   {pretty}
                 </pre>
